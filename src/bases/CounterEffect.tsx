@@ -1,10 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 
 
 export const CounterEffect = () => {
 
   const [ counter, setCounter ] = useState( 5 );
+
+  /* -----------------------------------------------------------------
+     Hook para que ejecute los estilos de gsap cuando clicamos en 
+      un componente en concreto y no los ejecute en ambos
+  --------------------------------------------------------------------*/
+  const counterElement = useRef<HTMLHeadingElement>(null);
 
   const MAXIMUN_COUNT = 10;
 
@@ -16,8 +22,8 @@ export const CounterEffect = () => {
     
     console.log('¡Has llegado al valor máxmio!');
 
-    gsap.to('h1', { y: -10, duration: 0.2, ease: 'ease.out' }).then( () => {
-        gsap.to('h1', { y: 0 , duration: 1, ease: 'bounce.out' });
+    gsap.to( counterElement.current, { y: -10, duration: 0.2, ease: 'ease.out' }).then( () => {
+        gsap.to( counterElement.current, { y: 0 , duration: 1, ease: 'bounce.out' });
     });
 
   }, [counter]);
@@ -25,7 +31,7 @@ export const CounterEffect = () => {
   return (
     <>
     <h1>CounterEffect:</h1>
-    <h2>{ counter  }</h2>
+    <h2 ref={ counterElement }>{ counter  }</h2>
 
     <button onClick={ handleClick }>
       +1
